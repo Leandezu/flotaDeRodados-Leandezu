@@ -1,21 +1,23 @@
-class Pedido{
-	const property distancia
-	const property tiempo
-	const property pasajeros
-	const coloresIncompatibles = #{}
+import rodados.*
+import dependencias.*
+
+class Pedido {
 	
-	method velocidadRequerida(){
-		return distancia/tiempo
+	var property distancia
+	var property tiempo
+	var property pasajeros
+	var property incompatibles = #{}
+	
+	method puedeSatisfacerUnPedido(auto){
+		return auto.velocidad() + 10 - (distancia.div(tiempo)) >= 10 and
+		auto.capacidad() >= pasajeros and
+		not incompatibles.any({a => a == auto.color()})
 	}
 	
-	method puedeSerSatisfechoPor(unRodado){
-		return unRodado.velocidad() >= 10 + self.velocidadRequerida()
-		and unRodado.capacidad() >= pasajeros
-		and self.esDeColorCompatible(unRodado.color())
+	method acelerar(){
+		tiempo = tiempo - 1
 	}
-	
-	method esDeColorCompatible(unColor){
-		return coloresIncompatibles.contains(unColor)
+	method relajar(){
+		tiempo = tiempo + 1
 	}
-	
 }

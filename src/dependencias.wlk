@@ -1,54 +1,63 @@
-import rodados.*
-import pedidos.*
-
 class Dependencia{
-	var property cantidadEmpleado = 0
-	const pedidos = []
-	const rodados = []
+	var property cantEmpleados
+	var flota = []
+	var pedidos = []
 	
 	method agregarAFlota(rodado){
-		rodados.add(rodado)
+		flota.add(rodado)
 	}
 	method quitarDeFlota(rodado){
-		rodados.remove(rodado)
+		flota.remove(rodado)
 	}
-	method pesoTotalDeLaFlota(){
-		rodados.sum({obj => obj.peso()})
-	}
-	method todosSuperanXVelocidad(unaVelocidad){
-		return rodados.all({rodado => rodado.velocidad() >= unaVelocidad})
+	method pesoTotalFlota(){
+		return flota.sum({r => r.peso()})
 	}
 	method estaBienEquipada(){
-		return rodados.size() >= 3 and self.todosSuperanXVelocidad(100)
+		return flota.size() >= 3 and flota.all({r => r.velocidad() >= 100})
 	}
 	method capacidadTotalEnColor(color){
-		return self.rodadosDeColor(color).sum({r => r.capacidad()})
-	}
-	method rodadosDeColor(color) {
-		return rodados.filter({r => r.color() == color})
+		return flota.filter({r => r.color() == color}).sum({r => r.capacidad()})
 	}
 	method colorDelRodadoMasRapido(){
-		return self.rodadoMasRapido().color()
-	}
-	method rodadoMasRapido() {
-		if(rodados.isEmpty()){
-			self.error("No se puede calcular el maximo")
-		}
-		return rodados.max({r => r.velocidad()})
-	}
-	method capacidadDeLaFlota(){
-		return rodados.sum({r => r.capacidad()})
+		return flota.max({r => r.velocidad()}).color()
 	}
 	method capacidadFaltante(){
-		return 0.max(cantidadEmpleado - self.capacidadDeLaFlota())
+		return 0.max(cantEmpleados - flota.sum({r => r.capacidad()}))
 	}
 	method esGrande(){
-		return cantidadEmpleado >= 40 and rodados.size() >= 5
+		return flota.size() == 5 and cantEmpleados >= 40
 	}
-	method ningunoSatisface(pedido){
-		return not rodados.any({r => pedido.puedeSerSatisfechoPor(r)})
+	method estaElRodado(rodado){
+		return flota.find({r => r == rodado})
 	}
-	method pedidosInstatisfechos(){
-		return pedidos.filter({p => self.ningunoSatisface(p)})
+	
+	method agregarPedido(unPedido){
+		pedidos.add(unPedido)
 	}
+	
+	method quitarPedido(unPedido){
+		pedidos.remove(unPedido)
+	}
+	
+	method totalDePasajerosEnPedidos(){
+		return pedidos.sum({p => p.pasajeros()})
+	}
+	
+	method ningunoSatisfaceElPedido(pedido){
+		return flota.all({r => not pedido.puedeSatisfacerUnPedido(r)})
+	}
+	
+	method pedidosInsatisfechos(){
+		return pedidos.filter({p => self.ningunoSatisfaceElPedido(p)})
+	}
+	
+	method noEsCompatibleConElColorDelPedido(color){
+		return pedidos.all({p => not p.incompatibles().any({c => c == color})})
+	}
+	
+	method relajarTodosLosPedidos(){
+		return pedidos.forEach({p => p.relajar()})
+	}
+	
+	
 }

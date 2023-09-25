@@ -1,3 +1,4 @@
+import dependencias.*
 
 class Corsa{
 	var property color
@@ -5,53 +6,31 @@ class Corsa{
 	method capacidad() = 4
 	method velocidad() = 150
 	method peso() = 1300
-	
 }
 
 class Kwid{
-	var tieneTanque = false
+	var tieneTanque = true
 	
 	method capacidad(){
-		return if(not tieneTanque){4}else{3}
+		return if(tieneTanque){3}else{4}
 	}
-	method velocidad() = if(not tieneTanque){110}else{120}
-	method peso() = if(not tieneTanque){1200}else{1350}
+	method velocidad(){
+		return if(tieneTanque){120}else{110}
+	}
+	method peso(){
+		return if(tieneTanque){1350}else{1200}
+	}
 	method color() = "azul"
 }
 
-object traffic{
-	var property interior
-	var property motor
-	
-	method configurar(unInterior, unMotor){
-		interior = unInterior
-		motor = unMotor
-	}
-	method capacidad() = interior.capacidad()
-	method velocidad() = motor.velocidad()
-	method peso() = 4000 + interior.peso() + motor.peso()
-	method color() = "blanco"	
-	
-}
-
-object motorBataton{
-	method peso() = 500
-	method velocidad() = 80 
-}
-
-object motorPulenta{
-	method peso() = 800
-	method velocidad() = 130
-}
-
-object interiorComodo{
-	method capacidad() = 5
-	method peso() = 700
-}
-
-object interiorPopular{
-	method capacidad() = 12
-	method peso() = 1000
+object trafic{
+	 var interior = popular
+	 var motor = bataton
+	 
+	 method capacidad() = interior.capadidad()
+	 method velocidad() = motor.velocidad()
+	 method peso() = 4000 + interior.peso() + motor.peso()
+	 method color() = "blanco"
 }
 
 class AutoEspecial{
@@ -60,6 +39,40 @@ class AutoEspecial{
 	var property peso
 	var property color
 }
+
+object comodo{
+	
+	method capacidad() = 5
+	method peso() = 700
+}
+
+object popular{
+	
+	method capadidad() = 12
+	method peso() = 1000
+}
+
+object pulenta{
+	
+	method peso() = 800
+	method velocidad() = 130
+}
+
+object bataton{
+	
+	method peso() = 500
+	method velocidad() = 80
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
